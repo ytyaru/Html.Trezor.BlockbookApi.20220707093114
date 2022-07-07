@@ -8,7 +8,7 @@ class TrezorClient extends RestClient { // https://github.com/trezor/blockbook/b
     }
     async address(address, options={}) { // 指定アドレスの取引txid一覧を取得する
         const query = this.#makeAddrParams(options)
-        // trezor-client.js:13 Uncaught (in promise) ReferenceError: headers is not defined
+        // Access to fetch at 'https://blockbook.electrum-mona.org/api/v2/address/MEHCqJbgiNERCH3bRAtNSSD9uxPViEX1nu' from origin 'https://localhost' has been blocked by CORS policy: Request header field content-type is not allowed by Access-Control-Allow-Headers in preflight response.
         // https://blog.foresta.me/posts/http_preflight_request/
         const headers = {'Content-Type': 'text/plain'}
         return await this.get(`${this.domain}api/v2/address/${address}${(query) ? '?' + query : ''}`, headers)
