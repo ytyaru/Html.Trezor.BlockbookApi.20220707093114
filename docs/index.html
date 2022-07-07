@@ -1,0 +1,146 @@
+<!doctype html>
+<html>
+<head prefix="og: https://ogp.me/ns# article: https://ogp.me/ns/article#">
+<meta charset="utf-8">
+<title>TrezorのBlockbook APIをリクエストする</title>
+<meta name="description" content="取引データを取得するために。">
+<meta name="author" content="ytyaru">
+<link rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/deed.ja">
+<link rel="icon" href="asset/image/avator.png">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/toot-dialog.css">
+<link rel="stylesheet" href="css/transaction.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta property="og:type" content="profile" />
+<meta property="og:site_name" content="ytyaru" />
+<meta property="og:title" content="TrezorのBlockbook APIをリクエストする" />
+<meta property="og:description" content="取引データを取得するために。" />
+<meta property="og:image" content="https://ytyaru.github.io/Html.Mona.Transaction.Get.20220618094040/asset/image/eye-catch.png" />
+<meta property="article:modified_time" content="2022-06-25T15:57:00+09:00" />
+<meta property="article:published_time" content="2022-06-20T16:50:00+09:00" />
+<meta property="article:author" content="https://ytyaru.github.io/" />
+<meta name="twitter:card" content="summary_large_image" />
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org/",
+    "@type": "Article",
+    "author": {
+      "@type": "Person",
+      "name": "ytyaru",
+      "url": "https://ytyaru.github.io/",
+      "sameAs": [
+        "https://twitter.com/ytyaru1",
+        "https://github.com/ytyaru",
+        "https://profile.hatena.ne.jp/ytyaru/",
+        "https://mstdn.jp/@ytyaru",
+        "https://pawoo.net/@ytyaru_pawoo",
+        "https://www.pixiv.net/users/53831310",
+        "https://monaledge.com/user/MEHCqJbgiNERCH3bRAtNSSD9uxPViEX1nu",
+        "https://web3.askmona.org/user/1590",
+        "https://misskey.io/@ytyaru",
+        "https://misskey.dev/@ytyaru",
+        "https://sushi.ski/@ytyaru",
+        "https://meisskey.one/@ytyaru",
+      ]
+    },
+    "dateModified": "2022-06-25T15:57:00+09:00",
+    "datePublished": "2022-06-20T16:50:00+09:00",
+    "headline": "TrezorのBlockbook APIをリクエストする",
+    "image": ["https://ytyaru.github.io/Html.Mona.Transaction.Get.20220618094040/asset/image/eye-catch.png"]
+  }
+</script>
+<link rel="webmention" href="https://webmention.io/ytyaru.github.io/webmention" />
+<link rel="pingback" href="https://webmention.io/ytyaru.github.io/xmlrpc" />
+<link rel="me" href="https://twitter.com/ytyaru1">
+<link rel="me" href="https://mstdn.jp/@ytyaru">
+<link rel="me" href="https://pawoo.net/@ytyaru_pawoo">
+<link rel="me" href="https://misskey.io/@ytyaru">
+<link rel="me" href="https://misskey.dev/@ytyaru">
+<link rel="me" href="https://github.com/ytyaru">
+<link rel="me" href="https://profile.hatena.ne.jp/ytyaru/">
+<link rel="me" href="https://ytyaru.hatenablog.com/">
+<link rel="me" href="https://www.pixiv.net/users/53831310">
+<link rel="me" href="https://monaledge.com/user/MEHCqJbgiNERCH3bRAtNSSD9uxPViEX1nu">
+<link rel="me" href="https://web3.askmona.org/user/1590">
+<link rel="me" href="https://misskey.io/@ytyaru">
+<link rel="me" href="https://misskey.dev/@ytyaru">
+<link rel="me" href="https://sushi.ski/@ytyaru">
+<link rel="me" href="https://meisskey.one/@ytyaru">
+
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://unpkg.com/tippy.js@6"></script>
+<script src="./lib/tingle/0.16.0/tingle.js"></script>
+<link rel="stylesheet" href="./lib/tingle/0.16.0/tingle.css">
+<!--<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">-->
+<link rel="stylesheet" type="text/css" href="./lib/toastify/1.11.2/min.css">
+<!--<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>-->
+<script type="text/javascript" src="./lib/toastify/1.11.2/min.js"></script>
+<script src="lib/party/party.min.js"></script>
+<script src="lib/dexie/3.2.2/min.js"></script>
+
+<script src="js/toaster.js"></script>
+<script src="js/rest-client.js"></script>
+<script src="js/misskey-rest-client.js"></script>
+<script src="js/misskey-instance.js"></script>
+<script src="js/misskey-authorizer.js"></script>
+<script src="js/misskey-authorizer-oauth.js"></script>
+<script src="js/misskey-authorizer-miauth.js"></script>
+<script src="js/misskey-api-client.js"></script>
+<script src="js/misskey-note-button.js"></script>
+<script src="js/misskey-note-dialog.js"></script>
+<script src="js/webmention-requester.js"></script>
+<script src="js/mastodon-rest-client.js"></script>
+<script src="js/mastodon-authorizer.js"></script>
+<script src="js/mastodon-api-client.js"></script>
+<script src="js/toot-button.js"></script>
+<script src="js/toot-dialog.js"></script>
+<script src="js/comment.js"></script>
+<script src="js/tweet-button.js"></script>
+<script src="js/mention-section.js"></script>
+<script src="js/mpurse-send-button.js"></script>
+<script src="js/party-sparkle-image.js"></script>
+<script src="js/party-sparkle-hart.js"></script>
+<script src="js/mastodon-instance.js"></script>
+<script src="js/mastodon-profile-generator.js"></script>
+<script src="js/misskey-profile-generator.js"></script>
+<script src="js/mastodon-redirect-callback-reciver.js"></script>
+<script src="js/misskey-redirect-callback-reciver.js"></script>
+<script src="js/profile-register.js"></script>
+<script src="js/google-apps-script-client.js"></script>
+<script src="js/profile-generator.js"></script>
+
+<script src="js/trezor-client.js"></script>
+<!--
+<script src="js/mona-transaction-db.js"></script>
+<script src="js/mona-transaction-client.js"></script>
+<script src="js/mona-transaction-viewer.js"></script>
+<script src="js/circle-svg-generator.js"></script>
+-->
+<script src="js/main.js"></script>
+</head>
+<body>
+<h1>TrezorのBlockbook APIをリクエストする</h1>
+<p>取引データを取得するために。<a href="https://github.com/trezor/blockbook/blob/master/docs/api.md">Trezor Blockbook API</a></p>
+<input id="address" value="" placeholder="モナコインのアドレス">
+<button id="get-transaction" type="button">取引情報を取得する</button>
+<textarea id="response" value="" placeholder="取引情報JSON"></textarea>
+<div id="export-transaction"></div>
+
+<footer>
+    <a href="https://ytyaru.github.io/" title="著者" target="_blank" rel="noopener noreferrer"><img src="./asset/image/avator.png" width="64" height="64">ytyaru</a>
+    <mpurse-send-button to="MEHCqJbgiNERCH3bRAtNSSD9uxPViEX1nu"></mpurse-send-button>
+    <a href="https://ytyaru.github.io/Html.Mpurse.Api.20220517160403/setup.html" title="モナコインを使うには">？</a>
+</footer>
+
+<!--
+<mpurse-send-button></mpurse-send-button>
+<mpurse-send-button to="MEHCqJbgiNERCH3bRAtNSSD9uxPViEX1nu" img="coin-monar"></mpurse-send-button>
+-->
+
+<tweet-button text="いいね！\n"></tweet-button>
+<toot-dialog domain="mstdn.jp pawoo.net" status="いいね！"></toot-dialog>
+<misskey-note-dialog domain="misskey.io misskey.dev" status="いいね！"></misskey-note-dialog>
+<mention-section></mention-section>
+</body>
+</html>
+
